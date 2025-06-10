@@ -1,6 +1,6 @@
 @use "sass:color";
 
-$bg: #212223;
+$bg: #000;
 $fg: #f1f1f1;
 $accent: #378DF7;
 $radius: 7px;
@@ -10,13 +10,33 @@ window.Bar {
     box-shadow: none;
     background-color: $bg;
     color: $fg;
-    font-size: 1.1em;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 20px;
+    font-family: "SFMono";
 
+    
     label {
-        margin: 0 8px;
+        margin:  8px;
+    }
+    
+   .state-2 {
+        color: #f96505;
+        font-size: 12px;
+        padding-top: 2px;
     }
 
+    .state-1 {
+        color: #f7ba30;
+        font-size: 12px;
+        padding-top: 2px;
+    }
+
+    .state-4 {
+        color: #aaff00;
+        font-size: 12px;
+        padding-top: 2px;
+    }
     .Workspaces  {
         button {
             all: unset;
@@ -69,6 +89,12 @@ window.Bar {
     .Battery label {
         padding-left: 0;
         margin-left: 0;
+    }
+
+    .Wifi {
+        padding-left: 16px;
+        margin: 0 14px;
+        /* color: red; */
     }
 
     .AudioSlider {

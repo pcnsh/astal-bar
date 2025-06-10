@@ -54,13 +54,16 @@ function AudioSlider() {
 
 function BatteryLevel() {
     const bat = Battery.get_default()
+    const mode = Variable("").poll(1000, "powerprofilesctl get")
 
     return <box className="Battery"
         visible={bind(bat, "isPresent")}>
         <icon icon={bind(bat, "batteryIconName")} />
         <label label={bind(bat, "percentage").as(p =>
-            `${Math.floor(p * 100)} %`
+            `${Math.floor(p * 100)}`
         )} />
+        <label  className={bind(bat, "state").as(s => `state-${s}`)} label={" ⚫ "} />
+        <label label={mode()} />
     </box>
 }
 
@@ -90,8 +93,7 @@ function Media() {
 }
 
 function Time({ format = "%H:%M - %A %e." }) {
-    const time = Variable<string>("").poll(1000, () =>
-        GLib.DateTime.new_now_local().format(format)!)
+    const time = Variable("").poll(1000, "date '+%d/%m %R'")
 
     return <label
         className="Time"
@@ -109,12 +111,16 @@ export default function Bar(monitor: Gdk.Monitor) {
         exclusivity={Astal.Exclusivity.EXCLUSIVE}
         anchor={TOP | LEFT | RIGHT}>
         <centerbox>
-            <box  halign={Gtk.Align.END} >
+            <box  halign={Gtk.Align.START} >
+
                 <Media />
+            </box>
+            <box/>
+            <box  halign={Gtk.Align.END} >
                 <SysTray />
                 <Wifi />
-                <AudioSlider />
                 <BatteryLevel />
+                <AudioSlider />
                 <Time />
             </box>
         </centerbox>
