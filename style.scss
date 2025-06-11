@@ -5,6 +5,50 @@ $fg: #f1f1f1;
 $accent: #378DF7;
 $radius: 7px;
 
+*:focus {
+    box-shadow: 0px 0px 0px 1px #202020;
+}
+
+.Popup .popup {
+    background: $bg;
+    box-shadow: 2px 3px 7px 0 rgba(0,0,0,0.4);
+    border-radius: 12px;
+    padding: 8px;
+
+    border: 1px solid #303030;
+}
+
+.Popup button {
+    color: $fg;
+    padding: 8px;
+}
+
+.Popup button .active {
+    color: #f96505;
+    font-size: 13px;
+    padding-top: 5px;
+    padding-left: 8px;
+}
+
+button:focus {
+    outline: none;
+    border: none;
+}
+
+button:hover,
+button:active {
+    background: #121212;
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+
+
+.PerfMode {
+    color: $fg;
+}
+
 window.Bar {
     border: none;
     box-shadow: none;
@@ -12,7 +56,7 @@ window.Bar {
     color: $fg;
     font-size: 14px;
     font-weight: 400;
-    padding: 20px;
+    padding: 0px;
     font-family: "SFMono";
 
     
@@ -37,6 +81,7 @@ window.Bar {
         font-size: 12px;
         padding-top: 2px;
     }
+   
     .Workspaces  {
         button {
             all: unset;
@@ -89,6 +134,14 @@ window.Bar {
     .Battery label {
         padding-left: 0;
         margin-left: 0;
+    }
+
+    .Battery button {
+        /* background: blue; */
+        padding: 0px;
+
+        /* margin: 20px; */
+        /* min-width: 100px; */
     }
 
     .Wifi {

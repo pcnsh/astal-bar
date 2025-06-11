@@ -1,11 +1,15 @@
 import { App } from "astal/gtk3"
-import { Variable, GLib, bind } from "astal"
+import { Variable, GLib, bind, exec} from "astal"
 import { Astal, Gtk, Gdk } from "astal/gtk3"
+
 import Mpris from "gi://AstalMpris"
 import Battery from "gi://AstalBattery"
 import Wp from "gi://AstalWp"
 import Network from "gi://AstalNetwork"
 import Tray from "gi://AstalTray"
+
+import Popover from "./Popover.tsx"
+
 
 function SysTray() {
     const tray = Tray.get_default()
@@ -52,9 +56,43 @@ function AudioSlider() {
     </box>
 }
 
-function BatteryLevel() {
+function BatteryLevel(props) {
     const bat = Battery.get_default()
-    const mode = Variable("").poll(1000, "powerprofilesctl get")
+    const visible = Variable(false);
+    const mode = Variable(exec("powerprofilesctl get"))
+
+    const _popover = <Popover
+            className="Popup"
+            onClose={() => visible.set(false)}
+            visible={visible()}
+            marginTop={40}
+            marginRight={265}
+            valign={Gtk.Align.START}
+            halign={Gtk.Align.END}
+    >
+            <box className="popup" vertical>
+                {/* maxWidthChars is needed to make wrap work */}
+                <button onClicked={() => setBatMode(visible, mode, "performance")}>
+                    <box>
+                        performance
+                        <label className="active" label={mode((value) => `${value == 'performance' ? '⚫' : ''}`)}/>
+                    </box>
+                </button>
+
+                <button onClicked={() => setBatMode(visible, mode, "balanced")}>
+                    <box>
+                        balanced
+                        <label className="active" label={mode((value) => `${value == 'balanced' ? '⚫' : ''}`)}/>
+                    </box>
+                </button>
+                <button onClicked={() => setBatMode(visible, mode, "power-saver")}>
+                    <box>
+                        power-saver
+                        <label className="active" label={mode((value) => `${value == 'power-saver' ? '⚫' : ''}`)}/>
+                    </box>
+                </button>
+            </box>
+    </Popover>
 
     return <box className="Battery"
         visible={bind(bat, "isPresent")}>
@@ -63,7 +101,9 @@ function BatteryLevel() {
             `${Math.floor(p * 100)}`
         )} />
         <label  className={bind(bat, "state").as(s => `state-${s}`)} label={" ⚫ "} />
-        <label label={mode()} />
+        <button className="PerfMode" onClicked={() => visible.set(true)} >
+            <label label={mode()} />
+        </button>
     </box>
 }
 
@@ -100,6 +140,33 @@ function Time({ format = "%H:%M - %A %e." }) {
         onDestroy={() => time.drop()}
         label={time()}
     />
+}
+
+function getBatMode(mode, label) {
+    if(mode.get() == label ) {
+        return "⚫"
+    }
+    return ""
+}
+
+function setBatMode(visible, mode, label) {
+    visible.set(false)
+    if(label == "performance") {
+        exec("powerprofilesctl set performance")
+    }
+
+    if(label == "balanced") {
+        exec("powerprofilesctl set balanced")
+    }
+
+    if(label == "power-saver") {
+        exec("powerprofilesctl set power-saver")
+
+    }
+    mode.set(label)
+    // print(mode.get())
+
+        // mode.set(label)
 }
 
 export default function Bar(monitor: Gdk.Monitor) {
