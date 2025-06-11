@@ -31,11 +31,13 @@ function Wifi() {
     const network = Network.get_default()
     const wifi = bind(network, "wifi")
 
-    return <box visible={wifi.as(Boolean)}>
+                // tooltipText={bind(wifi, "ssid").as(String)}
+    return <box className="Wifi" visible={wifi.as(Boolean)}>
+        {wifi.as(wifi => wifi && (
+            <label label={bind(wifi, "ssid").as(String)}/>
+        ))}
         {wifi.as(wifi => wifi && (
             <icon
-                tooltipText={bind(wifi, "ssid").as(String)}
-                className="Wifi"
                 icon={bind(wifi, "iconName")}
             />
         ))}
@@ -60,7 +62,6 @@ function BatteryLevel(props) {
     const bat = Battery.get_default()
     const visible = Variable(false);
     const mode = Variable(exec("powerprofilesctl get"))
-
     const _popover = <Popover
             className="Popup"
             onClose={() => visible.set(false)}

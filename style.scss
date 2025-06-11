@@ -145,9 +145,14 @@ window.Bar {
     }
 
     .Wifi {
-        padding-left: 16px;
-        margin: 0 14px;
+        /* padding-left: 16px; */
+        margin-right: 10px;
         /* color: red; */
+    }
+
+    .Wifi label {
+        font-size: 12px;
+        opacity: 0.4;
     }
 
     .AudioSlider {
